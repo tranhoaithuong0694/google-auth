@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { fetchStreams } from "../../actions";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { Button, Header, Icon, List } from "semantic-ui-react";
 
 class StreamList extends Component {
   componentDidMount() {
@@ -11,17 +12,14 @@ class StreamList extends Component {
   renderAdmin = stream => {
     if (stream.userId === this.props.currentUserId) {
       return (
-        <div className="right floated content">
-          <Link to={`/streams/edit/${stream.id}`} className="ui button primary">
-            Edit
+        <List.Content floated="right">
+          <Link to={`/streams/edit/${stream.id}`}>
+            <Button primary>Edit</Button>
           </Link>
-          <Link
-            to={`/streams/delete/${stream.id}`}
-            className="ui button negative"
-          >
-            Delete
+          <Link to={`/streams/delete/${stream.id}`}>
+            <Button negative>Delete</Button>
           </Link>
-        </div>
+        </List.Content>
       );
     }
   };
@@ -29,16 +27,16 @@ class StreamList extends Component {
   renderList = () => {
     return this.props.streams.map(stream => {
       return (
-        <div className="item" key={stream.id}>
+        <List.Item key={stream.id}>
           {this.renderAdmin(stream)}
-          <i className="large middle aligned icon camera" />
-          <div className="content">
-            <Link to={`/streams/${stream.id}`} className="header">
-              {stream.title}
-            </Link>
-            <div className="description">{stream.description}</div>
-          </div>
-        </div>
+          <Icon name="camera" size="large" />
+          <List.Content>
+            <List.Header>
+              <Link to={`/streams/${stream.id}`}>{stream.title}</Link>
+            </List.Header>
+            {stream.description}
+          </List.Content>
+        </List.Item>
       );
     });
   };
@@ -47,8 +45,8 @@ class StreamList extends Component {
     if (this.props.isSignedIn) {
       return (
         <div style={{ textAlign: "right" }}>
-          <Link to="/streams/new" className="ui button primary">
-            Create Stream
+          <Link to="/streams/new">
+            <Button primary>Create Stream</Button>
           </Link>
         </div>
       );
@@ -58,8 +56,10 @@ class StreamList extends Component {
   render() {
     return (
       <div>
-        <h2>Streams</h2>
-        <div className="ui celled list">{this.renderList()}</div>
+        <Header as="h2">Streams</Header>
+        <List divided celled>
+          {this.renderList()}
+        </List>
         {this.renderCreate()}
       </div>
     );
@@ -69,7 +69,7 @@ class StreamList extends Component {
 const mapStateToProps = state => {
   return {
     streams: Object.values(state.streams),
-    currentUserId: state.auth.userId,
+    currentUserId: state.auth.user ? state.auth.user.userId : null,
     isSignedIn: state.auth.isSignedIn
   };
 };
