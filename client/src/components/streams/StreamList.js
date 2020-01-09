@@ -13,11 +13,14 @@ class StreamList extends Component {
     if (stream.userId === this.props.currentUserId) {
       return (
         <List.Content floated="right">
-          <Link to={`/streams/edit/${stream.id}`}>
-            <Button primary>Edit</Button>
+          <Link to={`/streams/edit/${stream.id}`} className="ui button primary">
+            Edit
           </Link>
-          <Link to={`/streams/delete/${stream.id}`}>
-            <Button negative>Delete</Button>
+          <Link
+            to={`/streams/delete/${stream.id}`}
+            className="ui button negative"
+          >
+            Delete
           </Link>
         </List.Content>
       );
